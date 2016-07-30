@@ -5,10 +5,13 @@ import $ from 'jquery';
 import CategoryColumn from './CategoryColumn';
 import store from '../store';
 
+import session from '../models/session'
+
 const Gamebaord = React.createClass({
   getInitialState: function(){
     return {
-      categories: store.categories.toJSON()
+      categories: store.categories.toJSON(),
+      score: 0
     }
   },
   componentDidMount: function(){
@@ -21,6 +24,12 @@ const Gamebaord = React.createClass({
     });
 
     store.categories.makeNewGame();
+
+    // When the session model changes, we change the state with the updated score.
+    session.on('change', () => {
+      console.log('SESSION CHANGED');
+      this.setState({score: session.get('score')})
+    })
     // store.categories.each((categoryModel) => {
     //   categoryModel.getCategory(Math.floor(Math.random() * 18000));
     // });
@@ -35,7 +44,7 @@ const Gamebaord = React.createClass({
     return (
       <div id="game-container">
         <div className="gameboard">{categoriesArr}</div>
-        <footer>$0</footer>
+        <footer>${this.state.score}</footer>
       </div>
     );
   }

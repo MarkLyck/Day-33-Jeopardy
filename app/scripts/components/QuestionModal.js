@@ -2,15 +2,27 @@ import React from 'react';
 
 import $ from 'jquery';
 import store from '../store';
+import session from '../models/session'
 
 const QuestionModal = React.createClass({
   submitAnswer: function(e){
     e.preventDefault();
     let userAnswer = this.refs.useranswer.value.toLowerCase();
     let jeopardyAnswer = this.props.clue.answer.toLowerCase();
+
     if (userAnswer === this.props.clue.answer) {
       console.log('you got the answer right!');
       store.score.correctAnswer(this.props.clue);
+
+      // If they answer correct, update their session with the value.
+      // Get the current value and save it to a variable
+      let score = session.get('score')
+      // Update that variable with the value of the clue
+      score += this.props.clue.value
+      // Set the value of score in our session to the updated amount
+      session.set('score', score)
+      // setting a value, doesn't automatically cause an update. So we have to manually trigger it.
+      session.trigger('change')
     } else {
       console.log('wrong answer...');
       store.score.wrongAnswer(this.props.clue);
