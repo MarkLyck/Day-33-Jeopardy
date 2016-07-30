@@ -28,7 +28,7 @@ const Gamebaord = React.createClass({
   render: function(){
     let categoriesArr = this.state.categories.map((catObj, i, arr) => {
       let index=i;
-      console.log(catObj.category);
+      // console.log(catObj.category);
       // console.log(catObj.category.clues);
       return <CategoryColumn key={i} title={catObj.category.title} clues={catObj.category.clues} />;
       });
